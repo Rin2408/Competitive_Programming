@@ -23,7 +23,7 @@ typedef tuple<int,int,int> tiii;
 const LL MAX=1e15;
 const LL MIN=-1e15;
 int N,M;
-int A[MAXN],x_current=0,ans;
+int A[MAXN],x_current=0,ans,PAR[MAXN],CNT[MAXN];
 bool is_correct=1,Visit[MAXN],C2[MAXN];
 int C[MAXN];
 vector<tiii>Worm_Holes;
@@ -39,6 +39,30 @@ void init(void){
         Worm_Holes.pb({u,v,w});
     }
    // debug(SIZE(Worm_Holes));
+}
+int Find(int u){ return (u==PAR[u]?u:PAR[u]=Find(PAR[u]));}
+int Get(int u, int v){
+    u=Find(u); v=Find(v);
+    if(u==v) return 1;
+    if(CNT[u]<CNT[v]) swap(u,v);
+    CNT[u]+=CNT[v];
+    PAR[v]=u;
+    return 0;
+}
+bool DSU(const int x){
+    FOR(i,1,N) PAR[i]=i,CNT[i]=1;
+    FOR(j,0,x){
+        int u,v,w;
+        tie(u,v,w)=Worm_Holes[j];
+        Get(u,v);
+    }
+    bool ANS=1;
+    FOR(i,1,N){
+        REP(v,0,SIZE(V[i])){
+            ANS&=Get(V[i][v],i);
+        }
+    }
+    return ANS;
 }
 void dfs(int u, int par){
     Visit[u]=1;
@@ -103,7 +127,7 @@ void BS(void){
     //debug(R);
     while(L<=R){
         int m=(L+R)>>1;
-        if(check(m)){
+        if(DSU(m)/*check(m)*/){
             ans=get<2>(Worm_Holes[m]);
            // debug(ans);
             R=m-1;
@@ -134,13 +158,11 @@ void precal(void){
     }*/
    //debug(SIZE(Worm_Holes));
 }
-void DSU(void);
 void process(void){
     if(is_correct) cout<<-1;
     else{
         precal();
         BS();
-       // DSU();
        cout<<ans;
     }   
 }
