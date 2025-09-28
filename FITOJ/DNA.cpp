@@ -28,6 +28,6 @@ int main() {
         D[i] = D[i - 1] + a[i];
     }
     memset(M, -1, sizeof(M));
-
+    // Recursive
     cout << Cal(1, N) << '\n';
 }
