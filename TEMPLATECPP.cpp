@@ -25,12 +25,19 @@ typedef pair<int,int> pii;
 typedef tuple<int,int,int> tiii;
 const LL MAX=1e15;
 const LL MIN=-1e15;
-const int NMAX=2e5+5;
 string S;
 int N,M;
-template<typename T>
-bool Max(T &A, const T&B){
+template<typename T, typename R>
+bool Max(T &A, const R&B){
     if(A<=B){
+        A=B;
+        return 1;
+    }
+    return 0;
+}
+template<typename T, typename R>
+bool Min(T &A, const R&B){
+    if(A>=B){
         A=B;
         return 1;
     }
@@ -43,6 +50,7 @@ void process(void){
 
 }
 int main(void){
+    FastIO
     int T=1; cin>>T;
     while(T--){
         init();
